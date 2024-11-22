@@ -18,8 +18,15 @@ public class AccountService {
         return accountDAO.getAllAccounts();
     }
 
+    // public AccountDAO getAccountWithUsername(Account account) {
+    //     return AccountDAO.get
+    // }
+
     public Account insertAccount(Account account) {
-        return accountDAO.insertAccount(account);
+        if (account.getUsername() != null && !accountDAO.getAllAccounts().contains(account) && account.getPassword().length() > 4) {
+            return accountDAO.insertAccount(account);
+        }
+        return null;
     }
 
 }
