@@ -29,7 +29,7 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         
         app.post("/register", this::postNewUserHandler);
-        // app.post("/login", this::postLoginHandler);
+        app.post("/login", this::postLoginHandler);
 
         return app;
     }
@@ -62,16 +62,16 @@ public class SocialMediaController {
     If the login is not successful, the response status should be 401. (Unauthorized)
     */
 
-    // private void postLoginHandler(Context ctx) throws JsonProcessingException {
-    //     ObjectMapper mapper = new ObjectMapper();
-    //     Account account = mapper.readValue(ctx.body(), Account.class);
-    //     Account addedAccount = accountService.loginAccount(account);
-    //     if(addedAccount!=null){
-    //         ctx.json(mapper.writeValueAsString(addedAccount));
-    //     }else{
-    //         ctx.status(401);
-    //     }
-    // }
+    private void postLoginHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(ctx.body(), Account.class);
+        Account addedAccount = accountService.loginAccount(account);
+        if(addedAccount!=null){
+            ctx.json(mapper.writeValueAsString(addedAccount));
+        }else{
+            ctx.status(401);
+        }
+    }
 
 
 }

@@ -63,34 +63,25 @@ public class AccountDAO {
         return null;
     }
 
-        // /**
-    //  * TODO: 
-    //  * You only need to change the sql String and leverage PreparedStatement's setString and setInt methods.
-    //  * @return a book identified by isbn.
-    //  */
-    // public Account getAccountByUsername(int account_id){
-    //     Connection connection = ConnectionUtil.getConnection();
-    //     try {
-    //         //Write SQL logic here
-    //         String sql = "select * from account where account_id = ?";
-    //         PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    public Account loginAccount(Account account) {
+        Connection connection = ConnectionUtil.getConnection();
+        try {
+            String sql = "select * from account where account = ?, password = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-    //         //write preparedStatement's setInt method here.
-
-    //         ResultSet rs = preparedStatement.executeQuery();
-    //         while(rs.next()){
-    //             Account account = new Account(rs.getInt("account_id"),
-    //                     rs.getString("username"),
-    //                     rs.getString("password"));
-    //             return account;
-    //         }
-    //     }catch(SQLException e){
-    //         System.out.println(e.getMessage());
-    //     }
-    //     return null;
-    // }
-    // TODO: create
-    loginAcc():
-    username = ?, password = ?
-
+            preparedStatement.setString(1, account.getUsername());
+            preparedStatement.setString(2, account.getPassword());
+            preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                Account result_account = new Account(rs.getInt("account_id"),
+                        rs.getString("username"),
+                        rs.getString("password"));
+                return result_account;
+            }
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 }

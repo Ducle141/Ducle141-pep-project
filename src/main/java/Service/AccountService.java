@@ -24,7 +24,7 @@ public class AccountService {
 
     public Account insertAccount(Account account) {
         if (account.getUsername().isBlank() || account.getPassword().length() < 4) {
-            return null;    
+            return null;   
         }
         List<Account> listAccounts = getAllAccounts();
         for (Account acc : listAccounts) {
@@ -37,11 +37,7 @@ public class AccountService {
     }
 
     public Account loginAccount(Account account) {
-        String currentAccountUsername = account.getUsername();
-        String currentAccountPassword = account.getPassword();
-
-        if (accountDAO.getAllAccounts().contains(account)) {
-            
-        }
+        Account findAccount = accountDAO.loginAccount(account);
+        
     }
 }
