@@ -18,15 +18,30 @@ public class AccountService {
         return accountDAO.getAllAccounts();
     }
 
-    // public AccountDAO getAccountWithUsername(Account account) {
-    //     return AccountDAO.get
+    // public AccountDAO getAccountByUsername(Account account) {
+    //     return AccountDAO.getAccountBy
     // }
 
     public Account insertAccount(Account account) {
-        if (account.getUsername() != null && !accountDAO.getAllAccounts().contains(account) && account.getPassword().length() > 4) {
-            return accountDAO.insertAccount(account);
+        if (account.getUsername().isBlank() || account.getPassword().length() < 4) {
+            return null;    
         }
-        return null;
+        List<Account> listAccounts = getAllAccounts();
+        for (Account acc : listAccounts) {
+            if (acc.getAccount_id() == account.getAccount_id()) {
+                return null;
+            }
+        }
+        Account account1 = accountDAO.insertAccount(account);
+        return account1;
     }
 
+    public Account loginAccount(Account account) {
+        String currentAccountUsername = account.getUsername();
+        String currentAccountPassword = account.getPassword();
+
+        if (accountDAO.getAllAccounts().contains(account)) {
+            
+        }
+    }
 }
