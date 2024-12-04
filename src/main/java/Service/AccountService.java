@@ -18,11 +18,7 @@ public class AccountService {
         return accountDAO.getAllAccounts();
     }
 
-    // public AccountDAO getAccountByUsername(Account account) {
-    //     return AccountDAO.getAccountBy
-    // }
-
-    public Account insertAccount(Account account) {
+    public Account addAccount(Account account) {
         if (account.getUsername().isBlank() || account.getPassword().length() < 4) {
             return null;   
         }
@@ -34,10 +30,5 @@ public class AccountService {
         }
         Account account1 = accountDAO.insertAccount(account);
         return account1;
-    }
-
-    public Account loginAccount(Account account) {
-        Account findAccount = accountDAO.loginAccount(account);
-        
     }
 }

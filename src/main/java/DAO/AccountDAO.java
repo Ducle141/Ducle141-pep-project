@@ -66,18 +66,19 @@ public class AccountDAO {
     public Account loginAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection();
         try {
-            String sql = "select * from account where account = ?, password = ?";
+            String sql = "select * from account where account = ? and password = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, account.getUsername());
             preparedStatement.setString(2, account.getPassword());
             preparedStatement.executeUpdate();
             ResultSet rs = preparedStatement.executeQuery();
-            while(rs.next()){
-                Account result_account = new Account(rs.getInt("account_id"),
-                        rs.getString("username"),
-                        rs.getString("password"));
-                return result_account;
+            if (rs.next()){
+                Account result_account = new Account(rs.getString("username"),
+                                                     rs.getString("password"));
+                return result_account; 
+            } else {
+                return null;
             }
         } catch(SQLException e){
             System.out.println(e.getMessage());
