@@ -32,21 +32,12 @@ public class AccountDAO {
         return accounts;
     }
 
-    /**
-     * TODO: 
-     * Unlike some of the other insert problems, the primary key here will be provided by the client as part of the
-     * Book object. Given the specific nature of an ISBN as both a numerical organization of books outside of this
-     * database, and as a primary key, it would make sense for the client to submit an ISBN when submitting a book.
-     * You only need to change the sql String and leverage PreparedStatement's setString and setInt methods.
-     */
     public Account insertAccount(Account account){
         Connection connection = ConnectionUtil.getConnection();
         try {
-            //Write SQL logic here
             String sql = "insert into account (username, password) values (?,?)" ;
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            //write preparedStatement's setString and setInt methods here.
             preparedStatement.setString(1, account.getUsername());
             preparedStatement.setString(2, account.getPassword());
 
@@ -63,19 +54,20 @@ public class AccountDAO {
         return null;
     }
 
-    public Account loginAccount(Account account) {
+    public static Account getAccountByLogin(String username, String password) {
         Connection connection = ConnectionUtil.getConnection();
         try {
-            String sql = "select * from account where account = ? and password = ?";
+            String sql = "select * from account where username = ? and password = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setString(1, account.getUsername());
-            preparedStatement.setString(2, account.getPassword());
-            preparedStatement.executeUpdate();
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()){
-                Account result_account = new Account(rs.getString("username"),
-                                                     rs.getString("password"));
+                Account result_account = new Account(
+                    rs.getInt("account_id"),
+                    rs.getString("username"),
+                    rs.getString("password"));
                 return result_account; 
             } else {
                 return null;

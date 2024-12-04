@@ -28,7 +28,14 @@ public class AccountService {
                 return null;
             }
         }
+        // System.out.println("START");
+        // System.out.println(listAccounts);
+        // System.out.println("END");
         Account account1 = accountDAO.insertAccount(account);
         return account1;
+    }
+
+    public Account getAccountByLogin(String username, String password) {
+        return AccountDAO.getAccountByLogin(username, password);
     }
 }
