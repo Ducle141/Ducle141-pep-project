@@ -28,4 +28,10 @@ public class MessageService {
     public static List<Message> getMessagesByAccountID(int id) {
         return MessageDAO.getMessagesByAccountID(id);
     }
+
+    public static Message deleteMessageByID(int id) {
+        return MessageDAO.deleteMessageByID(id);
+    }
+
 }
+
