@@ -20,6 +20,7 @@ public class SocialMediaController {
         
         app.post("/register", this::postUserHandler);
         app.post("/login", this::loginUserHandler);
+        app.post("/messages", this::postMessageHandler);
 
         return app;
     }
@@ -49,5 +50,26 @@ public class SocialMediaController {
             ctx.status(401);
         }
     }
+    private void postMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        //Message Object contains text body, account_id of sender and time posted
+        int foundAccountID = message.getPosted_by();
+        Account foundAccount = accountService.getAccountByID(foundAccountID);
+        String messageText = message.getMessage_text();
+        Long messageTimePosted = message.getTime_posted_epoch();
+        
+        if (messageText.compareTo(new String(" ")) != 0 && 
+        messageText.length() < 255 && foundAccount != null) {
+            Message messageToAdd = new Message(foundAccountID, messageText, messageTimePosted);
+            Message messageAdded = MessageService.addMessage(messageToAdd);
+            //messageAdded in database automatically has message_id
+            ctx.json(mapper.writeValueAsString(messageAdded));
+            ctx.status(200);
+        } else {
+            ctx.status(400);
+        }
 
+
+    }
 }

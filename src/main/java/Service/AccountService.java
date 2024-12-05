@@ -38,4 +38,8 @@ public class AccountService {
     public Account getAccountByLogin(String username, String password) {
         return AccountDAO.getAccountByLogin(username, password);
     }
+
+    public Account getAccountByID(int id) {
+        return AccountDAO.getAccountByID(id);
+    }
 }
