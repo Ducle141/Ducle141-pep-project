@@ -3,8 +3,13 @@ import Model.Account;
 import Model.Message;
 import Service.AccountService;
 import Service.MessageService;
+
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import DAO.MessageDAO;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -21,7 +26,7 @@ public class SocialMediaController {
         app.post("/register", this::postUserHandler);
         app.post("/login", this::loginUserHandler);
         app.post("/messages", this::postMessageHandler);
-
+        app.get("/messages", this::getAllMessagesHandler);
         return app;
     }
     
@@ -68,7 +73,12 @@ public class SocialMediaController {
         } else {
             ctx.status(400);
         }
+    }
 
-
+    private void getAllMessagesHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        List<Message> messages = MessageService.getAllMessages();
+        ctx.json(mapper.writeValueAsString(messages));
+        ctx.status(200);
     }
 }
