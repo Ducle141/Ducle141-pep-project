@@ -21,6 +21,11 @@ public class MessageService {
         return MessageDAO.insertMessage(message);
     }
 
+    public static Message getMessageByID(int id) {
+        return MessageDAO.getMessageByID(id);
+    }
     
-
+    public static List<Message> getMessagesByAccountID(int id) {
+        return MessageDAO.getMessagesByAccountID(id);
+    }
 }

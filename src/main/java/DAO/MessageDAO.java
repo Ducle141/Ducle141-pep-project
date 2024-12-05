@@ -4,9 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.azul.crs.client.Result;
-
-import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 
 import Model.Message;
@@ -53,5 +50,45 @@ public class MessageDAO {
             System.out.println(e.getMessage());
         }
         return messages;
+    }
+    public static Message getMessageByID(int id)  {
+        Connection connection = ConnectionUtil.getConnection();
+        try {
+            String sql = "select * from message where message_id = ?";
+            
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                Message message = new Message(rs.getInt("message_id"), rs.getInt("posted_by"),
+                rs.getString("message_text"), rs.getLong("time_posted_epoch"));
+                return message;
+            }
+
+        }   catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public static List<Message> getMessagesByAccountID(int id)  {
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> messages = new ArrayList<>();
+        try {
+            String sql = "select * from message where posted_by=?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                Message message = new Message(rs.getInt("message_id"), rs.getInt("posted_by"),
+                        rs.getString("message_text"), rs.getLong("time_posted_epoch"));
+                messages.add(message);
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return messages; 
     }
 }
