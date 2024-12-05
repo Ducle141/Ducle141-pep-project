@@ -100,23 +100,8 @@ public class MessageDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
 
-            Message deletedMessage = getMessageByID(id); //get deleted message before executing delete
-            // ^ this may not be necessary if pkeyresultset returns the deleted fields
-            //                 !!!!! ^^^^
-            preparedStatement.executeUpdate(); //execute delete
-
-            //ResultSet pkeyResultSet = preparedStatement.getGeneratedKeys();
-            /**
-             * if(pkeyResultSet.next()){
-                /**
-                 * int deleted_message_id = (int) pkeyResultSet.getInt(1);
-                int deleted_posted_by = pkeyResultSet.getInt(2);
-                String deleted_message_text = pkeyResultSet.getString(3);
-                long deleted_time_posted_epoch = pkeyResultSet.getLong(4);
-                return new Message(deleted_message_id, deleted_posted_by, deleted_message_text, 
-                    deleted_time_posted_epoch);
-             }
-             */
+            Message deletedMessage = getMessageByID(id); 
+            preparedStatement.executeUpdate(); 
             return deletedMessage;
 
         }   catch(SQLException e){

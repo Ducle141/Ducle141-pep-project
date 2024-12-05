@@ -100,7 +100,7 @@ public class SocialMediaController {
 
     private void getAllMessagesByIDHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        int accountID = Integer.parseInt(ctx.pathParam("account_id")); //id to update from pathParam
+        int accountID = Integer.parseInt(ctx.pathParam("account_id")); 
         List<Message> messages = MessageService.getMessagesByAccountID(accountID);
         ctx.json(mapper.writeValueAsString(messages));
         ctx.status(200);
@@ -110,11 +110,10 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         int id = Integer.parseInt(ctx.pathParam("message_id"));
         Message message = MessageService.deleteMessageByID(id);
-        //if existed & deleted, the response body should include the NOW-DELETED message
-        //if did not exist & no delete, the response body should be empty
+        
         if (message != null) {
             ctx.json(mapper.writeValueAsString(message));
-        } //may need to write to json empty string if no delete performed
+        }
         ctx.status(200);
     }
 
