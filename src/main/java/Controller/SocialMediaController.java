@@ -58,9 +58,8 @@ public class SocialMediaController {
         Account foundAccount = accountService.getAccountByID(foundAccountID);
         String messageText = message.getMessage_text();
         Long messageTimePosted = message.getTime_posted_epoch();
-        
-        if (messageText.compareTo(new String(" ")) != 0 && 
-        messageText.length() < 255 && foundAccount != null) {
+
+        if (!messageText.isBlank() && messageText.length() < 255 && foundAccount != null) {
             Message messageToAdd = new Message(foundAccountID, messageText, messageTimePosted);
             Message messageAdded = MessageService.addMessage(messageToAdd);
             //messageAdded in database automatically has message_id

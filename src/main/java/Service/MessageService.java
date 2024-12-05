@@ -4,7 +4,7 @@ import DAO.MessageDAO;
 
 public class MessageService {
     
-    public Message addMessage(Message message) {
+    public static Message addMessage(Message message) {
         return MessageDAO.insertMessage(message);
     }
 }
