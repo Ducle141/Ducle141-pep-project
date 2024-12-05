@@ -33,5 +33,9 @@ public class MessageService {
         return MessageDAO.deleteMessageByID(id);
     }
 
+    public static Message updateMessage(int Message_id, Message Message){
+        return MessageDAO.getMessageByID(Message_id);
+    }
+
 }
 
