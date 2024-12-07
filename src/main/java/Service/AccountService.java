@@ -18,6 +18,13 @@ public class AccountService {
         return accountDAO.getAllAccounts();
     }
 
+    /***
+     * The business Login here is username is not blank, password is at least 4 characters long, and an Account with that username
+     * does not already exist.If these conditions are met, the response body should contain a JSON of the posted account, including account_id.
+     * The response status is 200 if successful and 400 (client error) if unsuccessful.
+     * @param account
+     * @return
+     */
     public Account addAccount(Account account) {
         if (account.getUsername().isBlank() || account.getPassword().length() < 4) {
             return null;   
@@ -28,9 +35,6 @@ public class AccountService {
                 return null;
             }
         }
-        // System.out.println("START");
-        // System.out.println(listAccounts);
-        // System.out.println("END");
         Account account1 = accountDAO.insertAccount(account);
         return account1;
     }

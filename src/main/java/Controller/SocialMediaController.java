@@ -5,11 +5,8 @@ import Service.AccountService;
 import Service.MessageService;
 
 import java.util.List;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import DAO.MessageDAO;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -35,6 +32,13 @@ public class SocialMediaController {
         return app;
     }
     
+    /**
+     * The Jackson ObjectMapper will automatically convert the JSON of the POST request into Account object.
+     * If accountService post account successfully, it will return a json of the posted account.
+     * If accountService returns a null account (meaning posting account was failed, the API will return 400 message (client error))
+     * @param ctx
+     * @throws JsonProcessingException
+     */
     private void registerAccountHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
@@ -45,6 +49,13 @@ public class SocialMediaController {
             ctx.status(400);
         }
     }
+
+    /**
+     * As a user, I should be able to verify my login on the endpoint POST localhost:8080/login. 
+     * The request body will contain a JSON representation of an Account, not containing an account_id. 
+     * 
+     * 
+     */
     private void loginAccountHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
@@ -60,6 +71,16 @@ public class SocialMediaController {
             ctx.status(401);
         }
     }
+
+    /***
+     * The request body will contain a JSON representation of the message, which should be persisted to the database,
+     * but will not contain the message_id.
+     * The creation of message will be successful of the message_text is not black, not over 255 character long, and posted_by 
+     * refers to an existing user in database. If successful, the response body will contain a JSON of the message, including auto_generate 
+     * message_id with a response status of 200. If unsucessful, the response status will be 400.
+     * @param ctx
+     * @throws JsonProcessingException
+     */
     private void postMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
@@ -87,6 +108,9 @@ public class SocialMediaController {
         ctx.status(200);
     }
 
+    /*
+     * It is expected for the response body to simply be empty if there is no such message, no such message_id.
+     */
     private void getMessageByIDHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         int id = Integer.parseInt(ctx.pathParam("message_id"));
@@ -99,6 +123,10 @@ public class SocialMediaController {
         }
     }
 
+    /*
+     * The returning response body should contain a JSON representation of a list of all messages posted by a particular user.
+     * The empty list is expected if that user does not have any message.
+     */
     private void getAllMessagesByIDHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         int accountID = Integer.parseInt(ctx.pathParam("account_id")); 
@@ -107,6 +135,10 @@ public class SocialMediaController {
         ctx.status(200);
     }    
 
+    /*
+     *  The deletion of an existing message should remove an existing message from the database. If the message existed, 
+     * the response body should contain the now-deleted message. The response status should be 200, which is the default.
+     */
     private void deleteMessageByIDHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         int id = Integer.parseInt(ctx.pathParam("message_id"));
@@ -118,9 +150,18 @@ public class SocialMediaController {
         ctx.status(200);
     }
 
+    /*
+     * The request body should contain a new message_text values to replace the message identified by message_id.
+     *  The update of a message should be successful if and only if the message id already exists and the new message_text is not blank and is not over 255 characters. 
+     * If the update is successful, the response body should contain the full updated message (including message_id, posted_by, message_text, and time_posted_epoch), 
+     * and the response status should be 200, which is the default. The message existing on the database should have the updated message_text.
+     */
     private void updateMessageByIDHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
+        // System.out.println("START--------------");
+        // System.err.println(ctx.body());
         int messageIDToUpdate = Integer.parseInt(ctx.pathParam("message_id")); 
+        // System.out.println(messageIDToUpdate);
         Message newMessageTextToUpdate = mapper.readValue(ctx.body(),Message.class); 
         String newMessageText = newMessageTextToUpdate.getMessage_text();
 

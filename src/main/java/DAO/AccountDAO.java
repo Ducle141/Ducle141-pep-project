@@ -54,6 +54,15 @@ public class AccountDAO {
         return null;
     }
 
+    /***
+     * The login will be sucessful if the username and password provided from user in the request body JSON match
+     * a real account existing in the database.If successful, the response body should contain a JSON of the account in the response body, including its account_id.
+     * The response status will be 200.
+     * If unsuccessful, the response status is 401 (unauthorized)
+     * @param username
+     * @param password
+     * @return
+     */
     public static Account getAccountByLogin(String username, String password) {
         Connection connection = ConnectionUtil.getConnection();
         try {
@@ -77,6 +86,7 @@ public class AccountDAO {
         }
         return null;
     }
+    
     public static Account getAccountByID(int id) {
         Connection connection = ConnectionUtil.getConnection();
         try {
